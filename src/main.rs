@@ -14,7 +14,8 @@ fn main() {
 
     while i < max_iters{
         i = i + 1;
-        let last_sim = simulator::simulate();
+        let mut sim = simulator::Simulator::init(101, 1000);
+        let last_sim = sim.simulate();
         let score_of_sims = all_sims.get(&last_sim);
         let score = match score_of_sims{
             None => 1,
@@ -25,13 +26,13 @@ fn main() {
 
     println!("Calculated in {} seconds", now.elapsed().as_secs());
 
-    //let mut file = File::create("output.csv").unwrap();
-    //file.write_all(b"Number;Occurences");
+    let mut file = File::create("output.csv").unwrap();
+    file.write_all(b"Number;Occurences");
 
-    // for elem in all_sims.iter() {
-    //     let line = format!("\n{};{}", elem.0, elem.1);
-    //     file.write(line.as_bytes());
-    // }
+    for elem in all_sims.iter() {
+        let line = format!("\n{};{}", elem.0, elem.1);
+        file.write(line.as_bytes());
+    }
 
 }
 
