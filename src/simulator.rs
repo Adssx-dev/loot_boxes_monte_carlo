@@ -1,4 +1,5 @@
 use rand::Rng;
+use rand::distributions::{Distribution, Uniform};
 
 pub struct Simulator {
     target_number: u32,
@@ -20,6 +21,9 @@ impl Simulator {
     pub fn simulate(&mut self) -> u32{
         self.reset();
         let mut it = 0;
+        let mut rng = rand::thread_rng();
+        let die = Uniform::from(0..(self.target_number));
+
         loop {
             it = it + 1;
 
@@ -27,7 +31,7 @@ impl Simulator {
                 return it;
             }
 
-            let new_element = rand::thread_rng().gen_range(0..(self.target_number));
+            let new_element = die.sample(&mut rng);
 
             if ! self.results[new_element as usize]  {
                 self.results[new_element as usize] = true;
