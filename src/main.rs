@@ -38,7 +38,7 @@ fn main() {
 
 
 pub fn plot_to_file(sim_result : &simulation_result::SimulationResult) -> Result<(), Box<dyn std::error::Error>> {
-    let root = BitMapBackend::new("data/1.png", (640, 480)).into_drawing_area();
+    let root = BitMapBackend::new("data/1.png", (800, 600)).into_drawing_area();
     
     root.fill(&WHITE)?;
 
