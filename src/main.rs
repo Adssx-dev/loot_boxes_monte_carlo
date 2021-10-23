@@ -27,8 +27,8 @@ fn main() {
     let mut file = File::create("output.csv").unwrap();
     file.write_all(b"Number;Occurences");
 
-    for elem in res.result_table.iter() {
-        let line = format!("\n{};{}", elem.0, elem.1);
+    for (pos, elem) in res.result_table.iter().enumerate() {
+        let line = format!("\n{};{}", pos, elem);
         file.write(line.as_bytes());
     }
 }

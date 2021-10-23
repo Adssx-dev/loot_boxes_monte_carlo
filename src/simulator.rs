@@ -29,7 +29,7 @@ impl Simulator {
 
             let new_element = rand::thread_rng().gen_range(0..(self.target_number));
 
-            if self.results[new_element as usize] == false {
+            if ! self.results[new_element as usize]  {
                 self.results[new_element as usize] = true;
                 self.number_of_valid_elements += 1;
                 if self.number_of_valid_elements == self.target_number {
