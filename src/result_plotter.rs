@@ -1,6 +1,7 @@
 use std::path::Path;
 use plotters::prelude::*;
 
+use crate::data_exporter;
 use crate::simulation_result;
 
 pub struct ResultPlotter {
@@ -15,10 +16,12 @@ impl ResultPlotter {
             current_id : 0,
         }
     }
+}
 
-    pub fn plot_to_file(&mut self, sim_result : &simulation_result::SimulationResult) -> Result<(), Box<dyn std::error::Error>> {
+impl data_exporter::DataExporter for ResultPlotter {
+    fn export(&mut self, sim_result : &simulation_result::SimulationResult) -> Result<(), Box<dyn std::error::Error>> {
         let folder = Path::new(&(self.folder));
-        let current_path = folder.join(Path::new(&(self.current_id.to_string()  + ".png")));
+        let current_path = folder.join(Path::new(&(format!("{:04}", self.current_id) + ".png")));
         self.current_id += 1;
         
         let root = BitMapBackend::new(&current_path, (800, 600)).into_drawing_area();
@@ -30,7 +33,7 @@ impl ResultPlotter {
         let mut scatter_ctx = ChartBuilder::on(&areas[2])
             .x_label_area_size(40)
             .y_label_area_size(40)
-            .build_cartesian_2d(0f64..1020f64, 0f64..500f64)?;
+            .build_cartesian_2d(0f64..1020f64, 0f64..5000f64)?;
         scatter_ctx
             .configure_mesh()
             .draw()?;

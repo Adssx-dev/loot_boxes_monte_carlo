@@ -1,5 +1,6 @@
 use crate::simulation_result;
 use crate::simulator;
+use crate::data_exporter;
 use std::thread;
 
 
@@ -20,7 +21,7 @@ impl MonteCarloSimulator {
         }
     }
 
-    pub fn simulate(&mut self, number_of_steps : u32, thread_count : u32) -> &simulation_result::SimulationResult {
+    pub fn simulate<T: data_exporter::DataExporter> (&mut self, number_of_steps : u32, thread_count : u32,  exporter : &mut T) -> &simulation_result::SimulationResult {
         let mut i : u32 = 0;
 
         let partial_simulations_count = self.number_of_simulations / number_of_steps;
@@ -28,6 +29,7 @@ impl MonteCarloSimulator {
             i = i + 1;
             let tmp_result = self.partial_simulate(partial_simulations_count, thread_count);
             self.simulation_results.add_all_results(&tmp_result);
+            exporter.export(&(self.simulation_results));
         }
         return &self.simulation_results;
     }

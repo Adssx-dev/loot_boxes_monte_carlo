@@ -7,13 +7,16 @@ mod monte_carlo_simulator;
 mod simulation_result;
 mod simulator;
 mod result_plotter;
+mod data_exporter;
 
 fn main() {
-    let max_iters = 100000;
+    let max_iters = 1000000;
     let num_of_targets = 101;
     let max_iterations_per_simulation = 1000;
 
     let timer = Instant::now();
+
+    let mut plotter = result_plotter::ResultPlotter::init("data/images".to_string());
 
     let mut simulator = monte_carlo_simulator::MonteCarloSimulator::init(
         max_iters,
@@ -21,15 +24,11 @@ fn main() {
         max_iterations_per_simulation,
     );
 
-    let res = simulator.simulate(100, 10);
+    simulator.simulate(300, 10, &mut plotter);
 
 
     println!("Calculated in {} milliseconds", timer.elapsed().as_millis());
 
-    let mut plotter = result_plotter::ResultPlotter::init("data/".to_string());
-    plotter.plot_to_file(res);
-    plotter.plot_to_file(res);
-    plotter.plot_to_file(res);
 
 
 //     let mut file = File::create("output.csv").unwrap();
