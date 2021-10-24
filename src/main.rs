@@ -21,10 +21,10 @@ fn main() {
         max_iterations_per_simulation,
     );
 
-    let res = simulator.simulate(1000, 1);
+    let res = simulator.simulate(100, 10);
 
 
-    println!("Calculated in {} seconds", timer.elapsed().as_secs());
+    println!("Calculated in {} milliseconds", timer.elapsed().as_millis());
 
     let mut plotter = result_plotter::ResultPlotter::init("data/".to_string());
     plotter.plot_to_file(res);

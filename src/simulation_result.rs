@@ -1,6 +1,7 @@
 use crate::simulation_result;
 use std::cmp::Ordering;
 
+#[derive(Clone)]
 pub struct SimulationResult {
     pub result_table : Vec<u32>,
     simulation_count : u32,
