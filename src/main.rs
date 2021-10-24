@@ -10,7 +10,7 @@ mod result_plotter;
 mod data_exporter;
 
 fn main() {
-    let max_iters = 1000000;
+    let max_iters = 100000;
     let num_of_targets = 101;
     let max_iterations_per_simulation = 1000;
 

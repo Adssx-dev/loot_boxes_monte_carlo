@@ -26,6 +26,8 @@ impl data_exporter::DataExporter for ResultPlotter {
         
         let root = BitMapBackend::new(&current_path, (800, 600)).into_drawing_area();
         
+        let number_of_results = sim_result.total_number_of_simulations() as f64;
+
         root.fill(&WHITE)?;
 
         let areas = root.split_by_breakpoints([944], [80]);
@@ -33,14 +35,14 @@ impl data_exporter::DataExporter for ResultPlotter {
         let mut scatter_ctx = ChartBuilder::on(&areas[2])
             .x_label_area_size(40)
             .y_label_area_size(40)
-            .build_cartesian_2d(0f64..1020f64, 0f64..5000f64)?;
+            .build_cartesian_2d(0f64..1020f64, 0f64..0.01f64)?;
         scatter_ctx
             .configure_mesh()
             .draw()?;
 
         scatter_ctx.draw_series(
             sim_result.result_table.iter().enumerate()
-                .map(|(x, y)| Circle::new((x as f64, *y as f64), 1.5, Into::<ShapeStyle>::into(&BLUE).filled())).collect::<Vec<_>>()
+                .map(|(x, y)| Circle::new((x as f64, (*y as f64)/number_of_results), 1.5, Into::<ShapeStyle>::into(&BLUE).filled())).collect::<Vec<_>>()
         )?;
 
         // To avoid the IO failure being ignored silently, we manually call the present function
