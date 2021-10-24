@@ -9,7 +9,7 @@ mod simulator;
 mod result_plotter;
 
 fn main() {
-    let max_iters = 10000;
+    let max_iters = 100000;
     let num_of_targets = 101;
     let max_iterations_per_simulation = 1000;
 
@@ -21,10 +21,10 @@ fn main() {
         max_iterations_per_simulation,
     );
 
-    let res = simulator.simulate();
+    let res = simulator.simulate(100, 10);
 
 
-    println!("Calculated in {} seconds", timer.elapsed().as_secs());
+    println!("Calculated in {} milliseconds", timer.elapsed().as_millis());
 
     let mut plotter = result_plotter::ResultPlotter::init("data/".to_string());
     plotter.plot_to_file(res);
