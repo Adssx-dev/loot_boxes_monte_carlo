@@ -9,7 +9,7 @@ mod simulator;
 mod result_plotter;
 
 fn main() {
-    let max_iters = 10000;
+    let max_iters = 100000;
     let num_of_targets = 101;
     let max_iterations_per_simulation = 1000;
 
@@ -21,7 +21,7 @@ fn main() {
         max_iterations_per_simulation,
     );
 
-    let res = simulator.simulate();
+    let res = simulator.simulate(1000, 1);
 
 
     println!("Calculated in {} seconds", timer.elapsed().as_secs());

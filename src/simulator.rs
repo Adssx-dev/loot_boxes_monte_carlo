@@ -1,6 +1,8 @@
 use rand::Rng;
 use rand::distributions::{Distribution, Uniform};
 
+
+#[derive(Clone)]
 pub struct Simulator {
     target_number: u32,
     max_iterations : u32,

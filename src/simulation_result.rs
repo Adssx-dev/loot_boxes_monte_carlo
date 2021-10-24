@@ -34,4 +34,9 @@ impl SimulationResult {
         }
         self.errors += other.errors;
     }
+    
+
+    pub fn total_number_of_simulations(&self) -> u32 {
+        self.errors + self.simulation_count
+    }
 }
