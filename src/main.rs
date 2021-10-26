@@ -16,6 +16,8 @@ fn main() {
 
     let timer = Instant::now();
 
+    let vector = log_vector(100.0, 10000000.0, 10.0, 300);
+
     let mut plotter = result_plotter::ResultPlotter::init("data/images".to_string());
 
     let mut simulator = monte_carlo_simulator::MonteCarloSimulator::init(
@@ -40,4 +42,22 @@ fn main() {
 }
 
 
+
+fn log_vector(min : f32, max : f32, base : f32, steps : u32) -> Vec<u32> {
+    let log_min = min.log(base);
+    let log_max = max.log(base);
+    let delta = (log_max - log_min) / (steps as f32);
+
+    let mut result = vec![];
+    let mut current_log_value = log_min;
+
+    result.push(min.ceil() as u32);
+    for i in 1..steps {
+        current_log_value = current_log_value + delta;
+        result.push(base.powf(current_log_value).ceil() as u32);
+    }
+    result.push(max.ceil() as u32);
+
+    result
+}
 
