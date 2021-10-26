@@ -20,6 +20,9 @@ impl ResultPlotter {
 
 impl data_exporter::DataExporter for ResultPlotter {
     fn export(&mut self, sim_result : &simulation_result::SimulationResult) -> Result<(), Box<dyn std::error::Error>> {
+        let mut title: String = "N=".to_owned();
+        title.push_str(&format!("{:08}", sim_result.total_number_of_simulations()));
+        
         let folder = Path::new(&(self.folder));
         let current_path = folder.join(Path::new(&(format!("{:04}", self.current_id) + ".png")));
         self.current_id += 1;
@@ -33,6 +36,7 @@ impl data_exporter::DataExporter for ResultPlotter {
         let areas = root.split_by_breakpoints([944], [80]);
 
         let mut scatter_ctx = ChartBuilder::on(&areas[2])
+            .caption(title, ("sans-serif", 50).into_font())
             .x_label_area_size(40)
             .y_label_area_size(40)
             .build_cartesian_2d(0f64..1020f64, 0f64..0.01f64)?;

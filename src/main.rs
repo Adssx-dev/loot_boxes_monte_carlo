@@ -16,8 +16,7 @@ fn main() {
 
     let timer = Instant::now();
 
-    let vector = log_vector(100.0, 10000000.0, 10.0, 300);
-
+    
     let mut plotter = result_plotter::ResultPlotter::init("data/images".to_string());
 
     let mut simulator = monte_carlo_simulator::MonteCarloSimulator::init(
@@ -26,7 +25,9 @@ fn main() {
         max_iterations_per_simulation,
     );
 
-    simulator.simulate(300, 10, &mut plotter);
+    let vector = log_vector(500.0, 10000000.0, 10.0, 300);
+
+    simulator.simulate(10, &mut plotter, &vector);
 
 
     println!("Calculated in {} milliseconds", timer.elapsed().as_millis());
