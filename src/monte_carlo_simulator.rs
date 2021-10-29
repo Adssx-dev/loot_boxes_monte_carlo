@@ -1,11 +1,13 @@
-use crate::data_exporter;
-use crate::simulation_result;
-use crate::simulator;
+use crate::data_exporter::DataExporter;
+use crate::simulation_result::SimulationResult;
+use crate::simulator::Simulator;
 use std::cmp;
+use std::thread;
 
+/// Struct to loop on simulation, aggregate results and output them
 pub struct MonteCarloSimulator {
-    simulation_results: simulation_result::SimulationResult,
-    simulator: simulator::Simulator,
+    simulation_results: SimulationResult,
+    simulator: Simulator,
     max_iterations_per_simulation: u32,
 }
 
@@ -16,19 +18,20 @@ impl MonteCarloSimulator {
     ) -> MonteCarloSimulator {
         MonteCarloSimulator {
             max_iterations_per_simulation: max_iterations_per_simulation,
-            simulator: simulator::Simulator::init(target_number, max_iterations_per_simulation),
-            simulation_results: simulation_result::SimulationResult::init(
+            simulator: Simulator::init(target_number, max_iterations_per_simulation),
+            simulation_results: SimulationResult::init(
                 max_iterations_per_simulation as usize,
             ),
         }
     }
 
-    pub fn simulate<T: data_exporter::DataExporter>(
+    /// Starts the simulation and outputs results with the DataExporter according to steps specified via update_vector
+    pub fn simulate<T: DataExporter>(
         &mut self,
         thread_count: u32,
         exporter: &mut T,
         update_vector : &Vec<u32>
-    ) -> &simulation_result::SimulationResult {
+    ) -> &SimulationResult {
 
         let mut previous = 0;
 
@@ -45,25 +48,28 @@ impl MonteCarloSimulator {
         return &self.simulation_results;
     }
 
+    /// Starts the simulation for the given step.
+    /// Spawns multiple threads to ensure 
     fn partial_simulate(
         &mut self,
         partial_simulation_size: u32,
         thread_count: u32,
-    ) -> simulation_result::SimulationResult {
+    ) -> SimulationResult {
         let mut partial_result =
-            simulation_result::SimulationResult::init(self.max_iterations_per_simulation as usize);
+            SimulationResult::init(self.max_iterations_per_simulation as usize);
         let max_iterations_per_simulation = self.max_iterations_per_simulation;
         let mut handles = vec![];
 
         let mut remaining = partial_simulation_size;
         let mut iters_per_thread = partial_simulation_size / thread_count;
+        
         if partial_simulation_size % thread_count > 0 {
             iters_per_thread += 1;
         }
 
         for _i in 0..thread_count {
             let mut simulator = self.simulator.clone();
-            handles.push(std::thread::spawn(move || {
+            handles.push(thread::spawn(move || {
                 parallel_simulate(
                     &mut simulator,
                     cmp::min(iters_per_thread, remaining),
@@ -88,14 +94,14 @@ impl MonteCarloSimulator {
 }
 
 fn parallel_simulate(
-    simulator: &mut simulator::Simulator,
+    simulator: &mut Simulator,
     number_of_simulations: u32,
     max_iterations_per_simulation: u32,
-) -> simulation_result::SimulationResult {
+) -> SimulationResult {
     let mut my_simulator = simulator.clone();
     let mut i = 0;
     let mut partial_result =
-        simulation_result::SimulationResult::init(max_iterations_per_simulation as usize);
+        SimulationResult::init(max_iterations_per_simulation as usize);
 
     while i < number_of_simulations {
         i += 1;

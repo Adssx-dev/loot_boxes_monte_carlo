@@ -8,12 +8,11 @@ mod data_exporter;
 
 fn main() {
     let max_iters = 10000000_f32;
-    let num_of_targets = 101;
+    let num_of_targets = 95;
     let max_iterations_per_simulation = 1000;
 
     let timer = Instant::now();
 
-    
     let mut plotter = result_plotter::ResultPlotter::init("data/images".to_string());
 
     let mut simulator = monte_carlo_simulator::MonteCarloSimulator::init(
@@ -27,19 +26,10 @@ fn main() {
 
 
     println!("Calculated in {} milliseconds", timer.elapsed().as_millis());
-
-
-
-//     let mut file = File::create("output.csv").unwrap();
-//     file.write_all(b"Number;Occurences");
-        // for (pos, elem) in res.result_table.iter().enumerate() {
-        //     let line = format!("\n{};{}", pos, elem);
-        //     file.write(line.as_bytes());
-//     }
 }
 
 
-
+/// Generates a vector on a logarithmic scale (growing slowly at first then faster and faster)
 fn log_vector(min : f32, max : f32, base : f32, steps : u32) -> Vec<u32> {
     let log_min = min.log(base);
     let log_max = max.log(base);

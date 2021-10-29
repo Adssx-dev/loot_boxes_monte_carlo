@@ -1,5 +1,5 @@
-use crate::simulation_result;
 
+/// Struct used to store and manipulate the results of one or multiple simulations
 #[derive(Clone)]
 pub struct SimulationResult {
     pub result_table : Vec<u32>,
@@ -10,7 +10,7 @@ pub struct SimulationResult {
 
 impl SimulationResult {
     pub fn init(max_simulation_size : usize) -> SimulationResult {
-        simulation_result::SimulationResult {
+        SimulationResult {
             result_table : vec![0; max_simulation_size],
             simulation_count : 0,    
             max_size : max_simulation_size,
@@ -18,6 +18,7 @@ impl SimulationResult {
         }
     }
 
+    /// Add a result to the total
     pub fn add_result(&mut self, id : usize, count:u32) {
         if id < self.max_size {
             self.result_table[id as usize] += count;
@@ -28,14 +29,15 @@ impl SimulationResult {
         }
     }
 
-    pub fn add_all_results(&mut self, other : &simulation_result::SimulationResult) {
+    /// Add a whole SimulationResult to this one
+    pub fn add_all_results(&mut self, other : &SimulationResult) {
         for (key, value) in other.result_table.iter().enumerate() {
             self.add_result(key, *value);
         }
         self.errors += other.errors;
     }
     
-
+    /// Calculates the total number of simulations, which is the number of simulations that worked + the number of ones that failed
     pub fn total_number_of_simulations(&self) -> u32 {
         self.errors + self.simulation_count
     }

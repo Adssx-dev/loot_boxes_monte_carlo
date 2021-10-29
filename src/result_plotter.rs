@@ -1,9 +1,11 @@
 use std::path::Path;
+use std::error::Error;
 use plotters::prelude::*;
 
-use crate::data_exporter;
-use crate::simulation_result;
+use crate::data_exporter::DataExporter;
+use crate::simulation_result::SimulationResult;
 
+/// Plots the results as pictures than can be used with FFMPEG to generate a video
 pub struct ResultPlotter {
     current_id : u32,
     folder: String,
@@ -18,8 +20,8 @@ impl ResultPlotter {
     }
 }
 
-impl data_exporter::DataExporter for ResultPlotter {
-    fn export(&mut self, sim_result : &simulation_result::SimulationResult) -> Result<(), Box<dyn std::error::Error>> {
+impl DataExporter for ResultPlotter {
+    fn export(&mut self, sim_result : &SimulationResult) -> Result<(), Box<dyn Error>> {
         let mut title: String = "N=".to_owned();
         title.push_str(&format!("{:08}", sim_result.total_number_of_simulations()));
         
