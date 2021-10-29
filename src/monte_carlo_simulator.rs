@@ -11,7 +11,6 @@ pub struct MonteCarloSimulator {
 
 impl MonteCarloSimulator {
     pub fn init(
-        simulations_number: u32,
         target_number: u32,
         max_iterations_per_simulation: u32,
     ) -> MonteCarloSimulator {
@@ -62,7 +61,7 @@ impl MonteCarloSimulator {
             iters_per_thread += 1;
         }
 
-        for i in 0..thread_count {
+        for _i in 0..thread_count {
             let mut simulator = self.simulator.clone();
             handles.push(std::thread::spawn(move || {
                 parallel_simulate(

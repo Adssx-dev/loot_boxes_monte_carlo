@@ -1,7 +1,4 @@
-use std::fs::File;
-use std::io::prelude::*;
 use std::time::Instant;
-use rand::SeedableRng;
 
 mod monte_carlo_simulator;
 mod simulation_result;
@@ -10,7 +7,7 @@ mod result_plotter;
 mod data_exporter;
 
 fn main() {
-    let max_iters = 100000;
+    let max_iters = 10000000_f32;
     let num_of_targets = 101;
     let max_iterations_per_simulation = 1000;
 
@@ -20,12 +17,11 @@ fn main() {
     let mut plotter = result_plotter::ResultPlotter::init("data/images".to_string());
 
     let mut simulator = monte_carlo_simulator::MonteCarloSimulator::init(
-        max_iters,
         num_of_targets,
         max_iterations_per_simulation,
     );
 
-    let vector = log_vector(500.0, 10000000.0, 10.0, 300);
+    let vector = log_vector(500.0, max_iters, 10.0, 300);
 
     simulator.simulate(10, &mut plotter, &vector);
 
@@ -53,7 +49,7 @@ fn log_vector(min : f32, max : f32, base : f32, steps : u32) -> Vec<u32> {
     let mut current_log_value = log_min;
 
     result.push(min.ceil() as u32);
-    for i in 1..steps {
+    for _i in 1..steps {
         current_log_value = current_log_value + delta;
         result.push(base.powf(current_log_value).ceil() as u32);
     }
