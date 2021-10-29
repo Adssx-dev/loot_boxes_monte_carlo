@@ -1,11 +1,9 @@
 use crate::data_exporter;
 use crate::simulation_result;
 use crate::simulator;
-use std::thread;
 use std::cmp;
 
 pub struct MonteCarloSimulator {
-    number_of_simulations: u32,
     simulation_results: simulation_result::SimulationResult,
     simulator: simulator::Simulator,
     max_iterations_per_simulation: u32,
@@ -18,7 +16,6 @@ impl MonteCarloSimulator {
         max_iterations_per_simulation: u32,
     ) -> MonteCarloSimulator {
         MonteCarloSimulator {
-            number_of_simulations: simulations_number,
             max_iterations_per_simulation: max_iterations_per_simulation,
             simulator: simulator::Simulator::init(target_number, max_iterations_per_simulation),
             simulation_results: simulation_result::SimulationResult::init(
@@ -41,7 +38,7 @@ impl MonteCarloSimulator {
 
             let tmp_result = self.partial_simulate(delta, thread_count);
             self.simulation_results.add_all_results(&tmp_result);
-            exporter.export(&(self.simulation_results));
+            exporter.export(&(self.simulation_results)).expect("Could not plot result");
 
             previous = *current;
         }
@@ -60,11 +57,13 @@ impl MonteCarloSimulator {
         let mut handles = vec![];
 
         let mut remaining = partial_simulation_size;
+        let mut iters_per_thread = partial_simulation_size / thread_count;
+        if partial_simulation_size % thread_count > 0 {
+            iters_per_thread += 1;
+        }
 
         for i in 0..thread_count {
             let mut simulator = self.simulator.clone();
-            let iters_per_thread = partial_simulation_size / thread_count;
-            remaining -= iters_per_thread;
             handles.push(std::thread::spawn(move || {
                 parallel_simulate(
                     &mut simulator,
@@ -72,6 +71,12 @@ impl MonteCarloSimulator {
                     max_iterations_per_simulation,
                 )
             }));
+            if remaining > iters_per_thread{
+                remaining -= iters_per_thread;
+            }
+            else {
+                remaining=0;
+            }
         }
 
         for handle in handles {
