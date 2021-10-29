@@ -1,7 +1,6 @@
-use rand::Rng;
 use rand::distributions::{Distribution, Uniform};
 
-
+/// Structure used to do one simulation
 #[derive(Clone)]
 pub struct Simulator {
     target_number: u32,
@@ -20,6 +19,7 @@ impl Simulator {
         }
     }
 
+    /// Simulates once and returns the number of steps it took to get all the elements
     pub fn simulate(&mut self) -> u32{
         self.reset();
         let mut it = 0;
@@ -46,6 +46,7 @@ impl Simulator {
         }
     }
 
+    /// Reset the simulator to reuse it
     fn reset(&mut self) {
         self.number_of_valid_elements = 0;
         self.results = vec![false; self.target_number as usize];

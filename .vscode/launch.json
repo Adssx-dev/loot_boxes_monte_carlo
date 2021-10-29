@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'departements'",
+            "name": "Debug executable 'lootboxes_monte_carlo'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=departements",
-                    "--package=departements"
+                    "--bin=lootboxes_monte_carlo",
+                    "--package=lootboxes_monte_carlo"
                 ],
                 "filter": {
-                    "name": "departements",
+                    "name": "lootboxes_monte_carlo",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'departements'",
+            "name": "Debug unit tests in executable 'lootboxes_monte_carlo'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=departements",
-                    "--package=departements"
+                    "--bin=lootboxes_monte_carlo",
+                    "--package=lootboxes_monte_carlo"
                 ],
                 "filter": {
-                    "name": "departements",
+                    "name": "lootboxes_monte_carlo",
                     "kind": "bin"
                 }
             },
