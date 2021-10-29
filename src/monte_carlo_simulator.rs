@@ -49,7 +49,7 @@ impl MonteCarloSimulator {
     }
 
     /// Starts the simulation for the given step.
-    /// Spawns multiple threads to ensure 
+    /// Spawns multiple threads to improve speed
     fn partial_simulate(
         &mut self,
         partial_simulation_size: u32,
@@ -62,7 +62,7 @@ impl MonteCarloSimulator {
 
         let mut remaining = partial_simulation_size;
         let mut iters_per_thread = partial_simulation_size / thread_count;
-        
+
         if partial_simulation_size % thread_count > 0 {
             iters_per_thread += 1;
         }
@@ -93,6 +93,7 @@ impl MonteCarloSimulator {
     }
 }
 
+/// Actual simulation function that can be started in a thread
 fn parallel_simulate(
     simulator: &mut Simulator,
     number_of_simulations: u32,
