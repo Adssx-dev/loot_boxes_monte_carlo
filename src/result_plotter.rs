@@ -39,7 +39,7 @@ impl DataExporter for ResultPlotter {
         let (upper, lower) = root.split_vertically(50);
 
         ChartBuilder::on(&upper)
-            .caption("Monte Carlo simulation of opening loot boxes", ("arial", 50).into_font().color(&BLUE))
+            .caption("Monte Carlo simulation of opening loot boxes", ("arial", 48).into_font().color(&BLUE))
             .build_cartesian_2d(0..1, 0..1)?
             .configure_mesh()
             .draw()?;
